@@ -15,10 +15,27 @@ intents.members = True
 bot = commands.Bot(command_prefix='-',intents=intents)
 
 #Global variables
-
+scoreboard = {}
 
 #Commands
+@bot.command
+async def addUser(ctx, *, user):
+  scoreboard[user] = 0
 
+@bot.command
+async def removeUser(ctx, *, user):
+  del scoreboard[user]
+
+@bot.command
+async def wonGame(ctx, *, message):
+
+
+@bot.command
+async def addPoints(ctx, *, points):
+  
+
+@bot.command
+async def removePoints(ctx, *, points):
 
 #Events
 @bot.event
