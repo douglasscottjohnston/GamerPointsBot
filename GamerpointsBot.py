@@ -90,7 +90,7 @@ async def scores(ctx):
   row += '-' * bWidth
   row += "|"
   place = 1
-  sortedBoard = sorted(scoreboard, key=scoreboard.get, reverse=True)
+  sortedBoard = dict(sorted(scoreboard, key=scoreboard.get, reverse=True))
   for member in sortedBoard:
   #generates the place of each user
     row += ((" %s |") % place)
