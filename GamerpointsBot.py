@@ -86,10 +86,10 @@ async def scores(ctx):
   sWidth = 15 #width of the score section
   row = ('-' * bWidth)
   row += "\n| # |     user     |     score     |\n"#14 lines in user, 15 lines in score, 32 total
-  row += "|"
   place = 1
   for member, points in sorted(scoreboard.items(), key=lambda item: item[1], reverse=True):
   #generates the place of each user
+    row += "|"
     row += ((" %s |") % place)
   #generates the user portion of the scoreboard
     #in case the username is bigger than the bWidth
@@ -103,7 +103,7 @@ async def scores(ctx):
       row += member
     else:
       #puts in the optimal ammount of spaces
-      spaces = (' ' * int((uWidth - len(member)) / 2))
+      spaces = ('-' * int((uWidth - len(member)) / 2))
       row += spaces
       row += member
       row += spaces
@@ -118,14 +118,14 @@ async def scores(ctx):
       row += spoints
     #puts the optimal ammount of spaces for any score bigger with multiple digets
     elif len(spoints) > 9:
-      spaces = (' ' * int((sWidth - len(spoints)) / 2))
+      spaces = ('-' * int((sWidth - len(spoints)) / 2))
       row += spaces
       row += spoints
       row += spaces
     else:
-      row += (' ' * 7)
+      row += ('-' * 7)
       row += spoints
-      row += (' ' * 7)
+      row += ('-' * 7)
     row += "|\n"
     place += 1
   #sends the scoreboard as an embed in the channel
