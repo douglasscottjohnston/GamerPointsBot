@@ -85,28 +85,19 @@ async def scores(ctx):
   uWidth = 14 #width of the user section
   sWidth = 15 #width of the score section
   row = ('-' * bWidth)
-  row += "\n| # -----user----- -----score-----\n"#14 lines in user, 15 lines in score, 32 total
+  row += "\n| place | user:  score\n"#14 lines in user, 15 lines in score, 32 total
   place = 1
   for member, points in sorted(scoreboard.items(), key=lambda item: item[1], reverse=True):
   #generates the place of each user
     row += "|"
     row += ((" %s |") % place)
   #generates the user portion of the scoreboard
-    #in case the username is bigger than the bWidth
-    if len(member) > uWidth:
-      temp = member
-      while len(temp) > uWidth:
-        temp = temp[:-1]
-      row += temp
-    #in case the username takes up the entire bWidth
-    elif len(member) == uWidth - 2:
-      row += member
-    else:
-      #puts in the optimal ammount of spaces
-      spaces = (' ' * int((uWidth - len(member)) / 2))
-      row += spaces
-      row += member
-      row += spaces
+    #puts in the optimal ammount of spaces
+    spaces = (' ' * int((uWidth - len(member)) / 2))
+    row += spaces
+    row += member
+    row += ":"
+    row += spaces
   #generates the score part of the scoreboard
     spoints = str(points)
     #maxes out the score at 999999999999999 if the score is bigger than the sWidth
