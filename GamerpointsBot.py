@@ -85,7 +85,7 @@ async def scores(ctx):
   uWidth = 14 #width of the user section
   sWidth = 15 #width of the score section
   row = ('-' * bWidth)
-  row += "\n| # |-----user-----|-----score-----|\n"#14 lines in user, 15 lines in score, 32 total
+  row += "\n| # -----user----- -----score-----\n"#14 lines in user, 15 lines in score, 32 total
   place = 1
   for member, points in sorted(scoreboard.items(), key=lambda item: item[1], reverse=True):
   #generates the place of each user
@@ -103,11 +103,10 @@ async def scores(ctx):
       row += member
     else:
       #puts in the optimal ammount of spaces
-      spaces = ('-' * int((uWidth - len(member)) / 2))
+      spaces = (' ' * int((uWidth - len(member)) / 2))
       row += spaces
       row += member
       row += spaces
-    row += "|"
   #generates the score part of the scoreboard
     spoints = str(points)
     #maxes out the score at 999999999999999 if the score is bigger than the sWidth
@@ -118,19 +117,19 @@ async def scores(ctx):
       row += spoints
     #puts the optimal ammount of spaces for any score bigger with multiple digets
     elif len(spoints) > 9:
-      spaces = ('-' * int((sWidth - len(spoints)) / 2))
+      spaces = (' ' * int((sWidth - len(spoints)) / 2))
       row += spaces
       row += spoints
       row += spaces
     else:
-      row += ('-' * 7)
+      row += (' ' * 7)
       row += spoints
-      row += ('-' * 7)
-    row += "|\n"
+      row += (' ' * 7)
     place += 1
-  #sends the scoreboard as an embed in the channel
+    row += "\n"
   row += ('-' * bWidth)
   print(row)
+  #sends the scoreboard as an embed in the channel
   msg = discord.Embed(title="Gamerpoints Leaderboard", description=row)
   await ctx.send(embed=msg)
   
