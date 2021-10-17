@@ -92,7 +92,7 @@ async def scores(ctx):
   place = 1
   for user in scoreboard:
   #generates the place of each user
-    row += ((" %place |") % place)
+    row += ((" %s |") % place)
   #generates the user portion of the scoreboard
     #in case the username is bigger than the bWidth
     if user.length > uWidth:
