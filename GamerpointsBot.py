@@ -84,21 +84,20 @@ async def scores(ctx):
   bWidth = 32 #board width
   uWidth = 14 #width of the user section
   sWidth = 15 #width of the score section
-  row = '-' * bWidth
+  row = ('-' * bWidth)
   row += "\n| # |     user     |     score     |\n"#14 lines in user, 15 lines in score, 32 total
   row += "\n"
-  row += '-' * bWidth
+  row += ('-' * bWidth)
   row += "|"
   place = 1
-  sortedBoard = dict(sorted(scoreboard, key=scoreboard.get, reverse=True))
-  for member in sortedBoard:
+  for member, points in sorted(scoreboard.items(), key=lambda item: item[1], reverse=True):
   #generates the place of each user
     row += ((" %s |") % place)
   #generates the user portion of the scoreboard
     #in case the username is bigger than the bWidth
     if len(member) > uWidth:
       temp = member
-      while temp > uWidth:
+      while len(temp) > uWidth:
         temp = temp[:-1]
       row += temp
     #in case the username takes up the entire bWidth
@@ -106,30 +105,31 @@ async def scores(ctx):
       row += member
     else:
       #puts in the optimal ammount of spaces
-      spaces = ' ' * int((uWidth - len(member)) / 2)
+      spaces = (' ' * int((uWidth - len(member)) / 2))
       row += spaces
       row += member
       row += spaces
     row += "|"
   #generates the score part of the scoreboard
-    score = str(sortedBoard.get(member))
+    spoints = str(points)
     #maxes out the score at 999999999999999 if the score is bigger than the sWidth
-    if len(score) > sWidth:
-      row += '9'*sWidth
+    if len(spoints) > sWidth:
+      row += ('9' * sWidth)
     #inserts no spaces if the score has as many digets as the width
-    elif len(score) == sWidth:
-      row += score
+    elif len(spoints) == sWidth:
+      row += spoints
     #puts the optimal ammount of spaces for any score bigger with multiple digets
-    elif len(score) > 9:
-      spaces = ' ' * int((sWidth - len(score)) / 2)
+    elif len(spoints) > 9:
+      spaces = (' ' * int((sWidth - len(spoints)) / 2))
       row += spaces
-      row += score
+      row += spoints
       row += spaces
     else:
-      row += ' '*7
-      row += score
-      row += ' '*7
+      row += (' ' * 7)
+      row += spoints
+      row += (' ' * 7)
     row += "|\n"
+    place += 1
   #sends the scoreboard as an embed in the channel
   msg = discord.Embed(title="Gamerpoints Leaderboard", description=row)
   await ctx.send(embed=msg)
