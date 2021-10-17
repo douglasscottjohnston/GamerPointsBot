@@ -85,7 +85,7 @@ async def scores(ctx):
   uWidth = 14 #width of the user section
   sWidth = 15 #width of the score section
   row = ('-' * bWidth)
-  row += "\n| # |     user     |     score     |\n"#14 lines in user, 15 lines in score, 32 total
+  row += "\n| # |-----user-----|-----score-----|\n"#14 lines in user, 15 lines in score, 32 total
   place = 1
   for member, points in sorted(scoreboard.items(), key=lambda item: item[1], reverse=True):
   #generates the place of each user
