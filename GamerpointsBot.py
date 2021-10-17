@@ -27,7 +27,7 @@ inMsg = " is already in the scoreboard"
 @commands.has_permissions(administrator=True)
 async def add_user(ctx, *members: commands.Greedy[discord.Member]):
   for member in members:
-    if scoreboard in member.name:
+    if member.name in scoreboard:
       await ctx.send(member.name + inMsg)
     else:
       scoreboard[member.name] = 0
@@ -37,7 +37,7 @@ async def add_user(ctx, *members: commands.Greedy[discord.Member]):
 @commands.has_permissions(administrator=True)
 async def remove_user(ctx, *members: commands.Greedy[discord.Member]):
   for member in members:
-    if scoreboard in member.name:
+    if member.name in scoreboard:
       del scoreboard[member.name]
       await ctx.send(member.name + " removed from the scoreboard")
     else:
@@ -46,7 +46,7 @@ async def remove_user(ctx, *members: commands.Greedy[discord.Member]):
 @bot.command(name="won_game", description="Adds 10 points to all members that won a game")
 async def won_game(ctx, *members: commands.Greedy[discord.Member]):
   for member in members:
-    if scoreboard in member.name:
+    if member.name in scoreboard:
       scoreboard[member.name] += 10
       await ctx.send(member.name + " gained 10 gamerpoints!")
     else:
@@ -55,7 +55,7 @@ async def won_game(ctx, *members: commands.Greedy[discord.Member]):
 @bot.command(name="lost_game", description="Removes 10 points from all members that lost a game")
 async def lost_game(ctx, *members: commands.Greedy[discord.Member]):
   for member in members:
-    if scoreboard in member.name:
+    if member.name in scoreboard:
       scoreboard[member.name] += 10
       await ctx.send(member.name + " lost 10 gamerpoints!")
     else:
@@ -64,7 +64,7 @@ async def lost_game(ctx, *members: commands.Greedy[discord.Member]):
 @bot.command(name="add_points", description="Adds points to the member")
 @commands.has_permissions(administrator=True)
 async def add_points(ctx, *, member, points):
-  if scoreboard in member.name:
+  if member.name in scoreboard:
     scoreboard[member.name] += points
     await ctx.send(member.name + (" gained %d gamerpoints!" % points))
   else:
@@ -73,7 +73,7 @@ async def add_points(ctx, *, member, points):
 @bot.command(name="remove_points", description="Removes points from tmember")
 @commands.has_permissions(administrator=True)
 async def remove_points(ctx, *, member, points):
-  if scoreboard in member.name:
+  if member.name in scoreboard:
     scoreboard[member.name] += points
     await ctx.send(member + " lost %d gamerpoints" % points)
   else:
