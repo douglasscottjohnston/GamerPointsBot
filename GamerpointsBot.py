@@ -17,7 +17,7 @@ intents.members = True
 bot = commands.Bot(command_prefix='-',intents=intents)
 
 #Global variables
-scoreboard = {}
+scoreboard = {} # member : score
 
 notInMsg = " is not in the scoreboard, add them with the addUser command"
 inMsg = " is already in the scoreboard"
@@ -84,34 +84,35 @@ async def scores(ctx):
   bWidth = 32 #board width
   uWidth = 14 #width of the user section
   sWidth = 15 #width of the score section
-  board = '-' * bWidth
-  board += "\n| # |     user     |     score     |\n"#14 lines in user, 15 lines in score, 32 total
-  board += '-' * bWidth
-  board += "\n"
-  row = "|"
+  row = '-' * bWidth
+  row += "\n| # |     user     |     score     |\n"#14 lines in user, 15 lines in score, 32 total
+  row += "\n"
+  row += '-' * bWidth
+  row += "|"
   place = 1
-  for user in scoreboard:
+  sortedBoard = sorted(scoreboard, key=scoreboard.get, reverse=True)
+  for member in sortedBoard:
   #generates the place of each user
     row += ((" %s |") % place)
   #generates the user portion of the scoreboard
     #in case the username is bigger than the bWidth
-    if len(user) > uWidth:
-      temp = user
+    if len(member) > uWidth:
+      temp = member
       while temp > uWidth:
         temp = temp[:-1]
       row += temp
     #in case the username takes up the entire bWidth
-    elif len(user) == uWidth - 2:
-      row += user
+    elif len(member) == uWidth - 2:
+      row += member
     else:
       #puts in the optimal ammount of spaces
-      spaces = ' ' * int((uWidth - len(user)) / 2)
+      spaces = ' ' * int((uWidth - len(member)) / 2)
       row += spaces
-      row += user
+      row += member
       row += spaces
     row += "|"
   #generates the score part of the scoreboard
-    score = str(scoreboard[user])
+    score = str(sortedBoard[member])
     #maxes out the score at 999999999999999 if the score is bigger than the sWidth
     if len(score) > sWidth:
       row += '9'*sWidth
