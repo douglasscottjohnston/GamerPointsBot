@@ -105,7 +105,7 @@ async def scores(ctx):
       row += user
     else:
       #puts in the optimal ammount of spaces
-      spaces = ' ' * ((uWidth - len(user)) / 2)
+      spaces = ' ' * int((uWidth - len(user)) / 2)
       row += spaces
       row += user
       row += spaces
@@ -120,7 +120,7 @@ async def scores(ctx):
       row += score
     #puts the optimal ammount of spaces for any score bigger with multiple digets
     elif len(score) > 9:
-      spaces = ' ' * ((sWidth - len(score)) / 2)
+      spaces = ' ' * int((sWidth - len(score)) / 2)
       row += spaces
       row += score
       row += spaces
