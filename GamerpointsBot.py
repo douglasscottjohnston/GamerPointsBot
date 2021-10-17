@@ -1,7 +1,8 @@
-import discord
-import discord.ext
 import os
 import random
+
+import discord
+import discord.ext
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -19,43 +20,66 @@ bot = commands.Bot(command_prefix='-',intents=intents)
 scoreboard = {}
 
 notInMsg = " is not in the scoreboard, add them with the addUser command"
+inMsg = " is already in the scoreboard"
 
 #Commands
-@bot.command()
-async def addUser(ctx, *members: commands.Greedy[discord.Member]):
+@bot.command(name="add_user", description="Adds a member to the scoreboard")
+@commands.has_permissions(administrator=True)
+async def add_user(ctx, *members: commands.Greedy[discord.Member]):
   for member in members:
-    if scoreboard.has_key(member):
-      await ctx.send(member.id)
+    if scoreboard.has_key(member.name):
+      await ctx.send(member.name + inMsg)
+    else:
+      scoreboard[member.name] = 0
+      await ctx.send(member.name + " added with a score of 0")
 
-@bot.command()
-async def removeUser(ctx, *members: commands.Greedy[discord.Member]):
-  del scoreboard[user]
+@bot.command(name="remove_user", description="Removes a member from the scoreboard")
+@commands.has_permissions(administrator=True)
+async def remove_user(ctx, *members: commands.Greedy[discord.Member]):
+  for member in members:
+    if scoreboard.has_key(member.name):
+      del scoreboard[member.name]
+      await ctx.send(member.name + " removed from the scoreboard")
+    else:
+      await ctx.send(member.name + notInMsg)
 
-@bot.command()
-async def wonGame(ctx, *members: commands.Greedy[discord.Member]):
-  if scoreboard.has_key(user):
-    scoreboard[user] += 10
-    await ctx.channel.send(user + " gained 10 gamerpoints!")
+@bot.command(name="won_game", description="Adds 10 points to all members that won a game")
+async def won_game(ctx, *members: commands.Greedy[discord.Member]):
+  for member in members:
+    if scoreboard.has_key(member.name):
+      scoreboard[member.name] += 10
+      await ctx.send(member.name + " gained 10 gamerpoints!")
+    else:
+      await ctx.send(member.name + notInMsg)
+
+@bot.command(name="lost_game", description="Removes 10 points from all members that lost a game")
+async def lost_game(ctx, *members: commands.Greedy[discord.Member]):
+  for member in members:
+    if scoreboard.has_key(member.name):
+      scoreboard[member.name] += 10
+      await ctx.send(member.name + " lost 10 gamerpoints!")
+    else:
+      await ctx.send(member.name  + notInMsg)
+
+@bot.command(name="add_points", description="Adds points to the member")
+@commands.has_permissions(administrator=True)
+async def add_points(ctx, *, member, points):
+  if scoreboard.has_key(member.name):
+    scoreboard[member.name] += points
+    await ctx.send(member.name + (" gained %d gamerpoints!" % points))
   else:
-    await ctx.channel.send(user + notInMsg)
+    await ctx.send(member + notInMsg)
 
-@bot.command()
-async def addPoints(ctx, *, user, points):
-  if scoreboard.has_key(user):
-    scoreboard[user] += points
-    await ctx.channel.send(user + " gained %points gamerpoints!" % points)
+@bot.command(name="remove_points", description="Removes points from tmember")
+@commands.has_permissions(administrator=True)
+async def remove_points(ctx, *, member, points):
+  if scoreboard.has_key(member.name):
+    scoreboard[member.name] += points
+    await ctx.send(member + " lost %d gamerpoints" % points)
   else:
-    await ctx.channel.send(user + notInMsg)
+    await ctx.send(member + notInMsg)
 
-@bot.command()
-async def removePoints(ctx, *, user, points):
-  if scoreboard.has_key(user):
-    scoreboard[user] += points
-    await ctx.channel.send(user + " gained %points gamerpoints" % points)
-  else:
-    await ctx.channel.send(user + notInMsg)
-
-@bot.command()
+@bot.command(name="scores", description="Displays the scoreboard")
 async def scores(ctx):
   bWidth = 32 #board width
   uWidth = 14 #width of the user section
@@ -118,6 +142,7 @@ async def on_ready():
 @bot.event
 async def on_message(Message):
     await bot.process_commands(Message)
+
 
 
 
