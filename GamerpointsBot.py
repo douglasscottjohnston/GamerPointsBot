@@ -47,7 +47,7 @@ async def remove_user(ctx, *members: commands.Greedy[discord.Member]):
 async def won_game(ctx, *members: commands.Greedy[discord.Member]):
   for member in members:
     if member.name in scoreboard:
-      scoreboard[member.name] += 10
+      scoreboard[member.name] = scoreboard.get(member.name) + 10
       await ctx.send(member.name + " gained 10 gamerpoints!")
     else:
       await ctx.send(member.name + notInMsg)
@@ -56,7 +56,7 @@ async def won_game(ctx, *members: commands.Greedy[discord.Member]):
 async def lost_game(ctx, *members: commands.Greedy[discord.Member]):
   for member in members:
     if member.name in scoreboard:
-      scoreboard[member.name] += 10
+      scoreboard[member.name] = scoreboard.get(member.name) - 10
       await ctx.send(member.name + " lost 10 gamerpoints!")
     else:
       await ctx.send(member.name  + notInMsg)
@@ -65,7 +65,7 @@ async def lost_game(ctx, *members: commands.Greedy[discord.Member]):
 @commands.has_permissions(administrator=True)
 async def add_points(ctx, *, member, points):
   if member.name in scoreboard:
-    scoreboard[member.name] += points
+    scoreboard[member.name] = scoreboard.get(member.name) + points
     await ctx.send(member.name + (" gained %d gamerpoints!" % points))
   else:
     await ctx.send(member + notInMsg)
@@ -74,7 +74,7 @@ async def add_points(ctx, *, member, points):
 @commands.has_permissions(administrator=True)
 async def remove_points(ctx, *, member, points):
   if member.name in scoreboard:
-    scoreboard[member.name] += points
+    scoreboard[member.name] = scoreboard.get(member.name) - points
     await ctx.send(member + " lost %d gamerpoints" % points)
   else:
     await ctx.send(member + notInMsg)
@@ -112,7 +112,7 @@ async def scores(ctx):
       row += spaces
     row += "|"
   #generates the score part of the scoreboard
-    score = str(sortedBoard[member])
+    score = str(sortedBoard.get(member))
     #maxes out the score at 999999999999999 if the score is bigger than the sWidth
     if len(score) > sWidth:
       row += '9'*sWidth
