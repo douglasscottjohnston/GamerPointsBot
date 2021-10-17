@@ -7,7 +7,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 
-# todo: put on the server and add a database to store the points and users
+# todo: put on the server and add a database to store the points and users, also fix the add and remove points functions
 
 
 #Credentials
