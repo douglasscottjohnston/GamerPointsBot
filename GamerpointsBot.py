@@ -86,8 +86,6 @@ async def scores(ctx):
   sWidth = 15 #width of the score section
   row = ('-' * bWidth)
   row += "\n| # |     user     |     score     |\n"#14 lines in user, 15 lines in score, 32 total
-  row += "\n"
-  row += ('-' * bWidth)
   row += "|"
   place = 1
   for member, points in sorted(scoreboard.items(), key=lambda item: item[1], reverse=True):
@@ -131,6 +129,7 @@ async def scores(ctx):
     row += "|\n"
     place += 1
   #sends the scoreboard as an embed in the channel
+  row += ('-' * bWidth)
   msg = discord.Embed(title="Gamerpoints Leaderboard", description=row)
   await ctx.send(embed=msg)
   
