@@ -84,7 +84,7 @@ async def scores(ctx):
   bWidth = 32 #board width
   uWidth = 14 #width of the user section
   sWidth = 15 #width of the score section
-  board = '-'*bWidth
+  board = '-' * bWidth
   board += "\n| # |     user     |     score     |\n"#14 lines in user, 15 lines in score, 32 total
   board += '-' * bWidth
   board += "\n"
@@ -95,17 +95,17 @@ async def scores(ctx):
     row += ((" %s |") % place)
   #generates the user portion of the scoreboard
     #in case the username is bigger than the bWidth
-    if user.length > uWidth:
+    if len(user) > uWidth:
       temp = user
       while temp > uWidth:
         temp = temp[:-1]
       row += temp
     #in case the username takes up the entire bWidth
-    elif user.length == uWidth - 2:
+    elif len(user) == uWidth - 2:
       row += user
     else:
       #puts in the optimal ammount of spaces
-      spaces = ' ' * ((uWidth - user.length) / 2)
+      spaces = ' ' * ((uWidth - len(user)) / 2)
       row += spaces
       row += user
       row += spaces
@@ -113,14 +113,14 @@ async def scores(ctx):
   #generates the score part of the scoreboard
     score = str(scoreboard[user])
     #maxes out the score at 999999999999999 if the score is bigger than the sWidth
-    if score.length > sWidth:
+    if len(score) > sWidth:
       row += '9'*sWidth
     #inserts no spaces if the score has as many digets as the width
-    elif score.length == sWidth:
+    elif len(score) == sWidth:
       row += score
     #puts the optimal ammount of spaces for any score bigger with multiple digets
-    elif score.length > 9:
-      spaces = ' ' * ((sWidth - score.length) / 2)
+    elif len(score) > 9:
+      spaces = ' ' * ((sWidth - len(score)) / 2)
       row += spaces
       row += score
       row += spaces
