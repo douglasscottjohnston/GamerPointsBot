@@ -130,6 +130,7 @@ async def scores(ctx):
     place += 1
   #sends the scoreboard as an embed in the channel
   row += ('-' * bWidth)
+  print(row)
   msg = discord.Embed(title="Gamerpoints Leaderboard", description=row)
   await ctx.send(embed=msg)
   
