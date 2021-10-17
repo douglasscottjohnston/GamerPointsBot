@@ -6,6 +6,10 @@ import discord.ext
 from discord.ext import commands
 from dotenv import load_dotenv
 
+
+# todo: put on the server and add a database to store the points and users
+
+
 #Credentials
 load_dotenv('.env')
 GAMERPOINTS_BOT_TOKEN = os.getenv("GAMERPOINTS_BOT_TOKEN")
