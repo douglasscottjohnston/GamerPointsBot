@@ -1,13 +1,16 @@
 import os
-import random
-
+import sqlite3
 import discord
 import discord.ext
 from discord.ext import commands
 from dotenv import load_dotenv
 
+from SaveBoard import SaveBoard
+
 
 # todo: put on the server and add a database to store the points and users, also fix the add and remove points functions
+
+
 
 
 #Credentials
@@ -23,44 +26,57 @@ bot = commands.Bot(command_prefix='-',intents=intents)
 #Global variables
 scoreboard = {} # member : score
 
-notInMsg = " is not in the scoreboard, add them with the addUser command"
+#SQLite
+save = SaveBoard(scoreboard)
+
+  #messeges
+notInMsg = " is not in the scoreboard, add them with the add_user command"
 inMsg = " is already in the scoreboard"
 
 #Commands
 @bot.command(name="add_user", description="Adds a member to the scoreboard")
 @commands.has_permissions(administrator=True)
 async def add_user(ctx, *members: commands.Greedy[discord.Member]):
+  scoreboard = save.get_values()
   for member in members:
     if member.name in scoreboard:
       await ctx.send(member.name + inMsg)
     else:
       scoreboard[member.name] = 0
+      save.main(scoreboard)
       await ctx.send(member.name + " added with a score of 0")
 
 @bot.command(name="remove_user", description="Removes a member from the scoreboard")
 @commands.has_permissions(administrator=True)
 async def remove_user(ctx, *members: commands.Greedy[discord.Member]):
+  scoreboard = save.get_values()
   for member in members:
     if member.name in scoreboard:
       del scoreboard[member.name]
       await ctx.send(member.name + " removed from the scoreboard")
     else:
+      save.main(scoreboard)
       await ctx.send(member.name + notInMsg)
 
 @bot.command(name="won_game", description="Adds 10 points to all members that won a game")
 async def won_game(ctx, *members: commands.Greedy[discord.Member]):
+  scoreboard = save.get_values()
+  print(scoreboard)
   for member in members:
     if member.name in scoreboard:
       scoreboard[member.name] = scoreboard.get(member.name) + 10
+      save.main(scoreboard)
       await ctx.send(member.name + " gained 10 gamerpoints!")
     else:
       await ctx.send(member.name + notInMsg)
 
 @bot.command(name="lost_game", description="Removes 10 points from all members that lost a game")
 async def lost_game(ctx, *members: commands.Greedy[discord.Member]):
+  scoreboard = save.get_values()
   for member in members:
     if member.name in scoreboard:
       scoreboard[member.name] = scoreboard.get(member.name) - 10
+      save.main(scoreboard)
       await ctx.send(member.name + " lost 10 gamerpoints!")
     else:
       await ctx.send(member.name  + notInMsg)
@@ -68,8 +84,10 @@ async def lost_game(ctx, *members: commands.Greedy[discord.Member]):
 @bot.command(name="add_points", description="Adds points to the member")
 @commands.has_permissions(administrator=True)
 async def add_points(ctx, *, member, points):
+  scoreboard = save.get_values()
   if member.name in scoreboard:
     scoreboard[member.name] = scoreboard.get(member.name) + points
+    save.main(scoreboard)
     await ctx.send(member.name + (" gained %d gamerpoints!" % points))
   else:
     await ctx.send(member + notInMsg)
@@ -77,14 +95,17 @@ async def add_points(ctx, *, member, points):
 @bot.command(name="remove_points", description="Removes points from tmember")
 @commands.has_permissions(administrator=True)
 async def remove_points(ctx, *, member, points):
+  scoreboard = save.get_values()
   if member.name in scoreboard:
     scoreboard[member.name] = scoreboard.get(member.name) - points
+    save.main(scoreboard)
     await ctx.send(member + " lost %d gamerpoints" % points)
   else:
     await ctx.send(member + notInMsg)
 
 @bot.command(name="scores", description="Displays the scoreboard")
 async def scores(ctx):
+  scoreboard = save.get_values()
   bWidth = 32 #board width
   uWidth = 14 #width of the user section
   sWidth = 15 #width of the score section
