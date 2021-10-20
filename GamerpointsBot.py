@@ -1,5 +1,5 @@
 import os
-import sqlite3
+import pickle
 import discord
 import discord.ext
 from discord.ext import commands
@@ -37,75 +37,75 @@ inMsg = " is already in the scoreboard"
 @bot.command(name="add_user", description="Adds a member to the scoreboard")
 @commands.has_permissions(administrator=True)
 async def add_user(ctx, *members: commands.Greedy[discord.Member]):
-  scoreboard = save.get_values()
+  scoreboard = save.load_obj()
   for member in members:
     if member.name in scoreboard:
       await ctx.send(member.name + inMsg)
     else:
       scoreboard[member.name] = 0
-      save.main(scoreboard)
+      save.save_obj(scoreboard)
       await ctx.send(member.name + " added with a score of 0")
 
 @bot.command(name="remove_user", description="Removes a member from the scoreboard")
 @commands.has_permissions(administrator=True)
 async def remove_user(ctx, *members: commands.Greedy[discord.Member]):
-  scoreboard = save.get_values()
+  scoreboard = save.load_obj()
   for member in members:
     if member.name in scoreboard:
       del scoreboard[member.name]
       await ctx.send(member.name + " removed from the scoreboard")
     else:
-      save.main(scoreboard)
       await ctx.send(member.name + notInMsg)
+  save.save_obj(scoreboard)
 
 @bot.command(name="won_game", description="Adds 10 points to all members that won a game")
 async def won_game(ctx, *members: commands.Greedy[discord.Member]):
-  scoreboard = save.get_values()
+  scoreboard = save.load_obj()
   print(scoreboard)
   for member in members:
     if member.name in scoreboard:
       scoreboard[member.name] = scoreboard.get(member.name) + 10
-      save.main(scoreboard)
       await ctx.send(member.name + " gained 10 gamerpoints!")
     else:
       await ctx.send(member.name + notInMsg)
+  save.save_obj(scoreboard)
 
 @bot.command(name="lost_game", description="Removes 10 points from all members that lost a game")
 async def lost_game(ctx, *members: commands.Greedy[discord.Member]):
-  scoreboard = save.get_values()
+  scoreboard = save.load_obj()
   for member in members:
     if member.name in scoreboard:
       scoreboard[member.name] = scoreboard.get(member.name) - 10
-      save.main(scoreboard)
       await ctx.send(member.name + " lost 10 gamerpoints!")
     else:
       await ctx.send(member.name  + notInMsg)
+  save.save_obj(scoreboard)
 
 @bot.command(name="add_points", description="Adds points to the member")
 @commands.has_permissions(administrator=True)
 async def add_points(ctx, *, member, points):
-  scoreboard = save.get_values()
+  scoreboard = save.load_obj()
   if member.name in scoreboard:
     scoreboard[member.name] = scoreboard.get(member.name) + points
-    save.main(scoreboard)
     await ctx.send(member.name + (" gained %d gamerpoints!" % points))
   else:
     await ctx.send(member + notInMsg)
+  save.save_obj(scoreboard)
 
 @bot.command(name="remove_points", description="Removes points from tmember")
 @commands.has_permissions(administrator=True)
 async def remove_points(ctx, *, member, points):
-  scoreboard = save.get_values()
+  scoreboard = save.load_obj()
   if member.name in scoreboard:
     scoreboard[member.name] = scoreboard.get(member.name) - points
-    save.main(scoreboard)
     await ctx.send(member + " lost %d gamerpoints" % points)
   else:
     await ctx.send(member + notInMsg)
+  save.save_obj(scoreboard)
 
 @bot.command(name="scores", description="Displays the scoreboard")
 async def scores(ctx):
-  scoreboard = save.get_values()
+  scoreboard = save.load_obj()
   bWidth = 32 #board width
   uWidth = 14 #width of the user section
   sWidth = 15 #width of the score section
