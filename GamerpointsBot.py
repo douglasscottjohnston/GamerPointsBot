@@ -34,6 +34,14 @@ notInMsg = " is not in the scoreboard, add them with the add_user command"
 inMsg = " is already in the scoreboard"
 
 #Commands
+@bot.command(name="add_server", description="Adds the entire server to the scoreboard")
+@commands.has_permissions(administrator=True)
+async def add_server(ctx):
+  for guild in bot.guilds:
+    for member in guild.members:
+      if not member.bot:
+        await add_user(ctx, member)
+
 @bot.command(name="add_user", description="Adds a member to the scoreboard")
 @commands.has_permissions(administrator=True)
 async def add_user(ctx, *members: commands.Greedy[discord.Member]):
