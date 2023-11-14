@@ -26,4 +26,4 @@ Adds the provided number of points to the provided member
 Removes the provided number of points from the provided member
 
 ### scores
-Displays the scoreboard
+Displays the leaderboard
